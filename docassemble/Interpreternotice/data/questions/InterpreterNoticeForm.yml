@@ -74,9 +74,9 @@ sections:
   - review_InterpreterNoticeForm: Review your answers
 ---
 objects:
-  - defendants: ALPeopleList.using(there_are_any=True)
+ 
   - users: ALPeopleList.using(there_are_any=True)
-  - plaintiffs: ALPeopleList.using(there_are_any=True)
+
 
 ---
 mandatory: True
