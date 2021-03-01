@@ -43,7 +43,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.Interpreternotice',
-      version='1.0',
+      version='1.1',
       description=('Interpreter notice'),
       long_description='# docassemble.Interpreternotice\r\n\r\nInterpreter notice\r\n\r\n## Author\r\n\r\nauthor@example.com\r\n\r\n',
       long_description_content_type='text/markdown',

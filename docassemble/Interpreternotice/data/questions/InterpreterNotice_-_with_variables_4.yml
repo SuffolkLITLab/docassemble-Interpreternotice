@@ -1,0 +1,259 @@
+include:
+  - docassemble.AssemblyLine:al_package.yml
+  - docassemble.MassAccess:massaccess.yml
+---
+comment: |
+  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
+metadata:
+  title: |
+    Interpreter Notice
+  short title: |
+    Interpreter Notice
+  tags:
+    - BE-00-00-00-00
+    - BE-04-00-00-00
+    - ED-00-00-00-00
+    - ES-00-00-00-00
+    - FA-00-00-00-00
+    - FA-07-00-00-00
+    - HE-00-00-00-00
+    - HO-00-00-00-00
+    - IM-00-00-00-00
+    - MO-00-00-00-00
+    - Other
+    - RI-10-00-00-00
+---
+comment: |
+  This section is used by AssemblyLine to control how some of the questions work.
+mandatory: True
+code: |
+  interview_metadata # make sure we initialize the object
+  if not defined("interview_metadata['InterpreterNotice__with_variables']"):
+    interview_metadata.initializeObject('InterpreterNotice__with_variables')
+  interview_metadata['InterpreterNotice__with_variables'].update({
+    'title': 'Interpreter Notice',
+    'short title': 'Interpreter Notice',
+    'description': 'If you a non-English speaking defendant or plaintiffs, and you would like to have an interpreter to assist you during  the civil action. The form will helps you  fill the require the appointment of a court-paid (cost and fee) an interpreter.',
+    'original_form': '',
+    'allowed courts': [
+      'Appeal Courts',
+      'Boston Municipal Court',
+      'District Court',
+      'Housing Court',
+      'Juvenile Court',
+      'Land Court',
+      'Massachusetts Supreme Judicial Court',
+      'Probate and Family Court',
+      'Superior Court',
+    ],
+    'categories': [
+      'BE-00-00-00-00',
+      'BE-04-00-00-00',
+      'ED-00-00-00-00',
+      'ES-00-00-00-00',
+      'FA-00-00-00-00',
+      'FA-07-00-00-00',
+      'HE-00-00-00-00',
+      'HO-00-00-00-00',
+      'IM-00-00-00-00',
+      'MO-00-00-00-00',
+      'Other',
+      'RI-10-00-00-00',
+      'Intellectual Property',
+      'Tax',
+      'Tort',
+    ],
+    'logic block variable': 'InterpreterNotice__with_variables',
+    'attachment block variable': 'InterpreterNotice__with_variables_attachment',
+    'typical role': 'unknown',
+  })
+---
+code: |
+  interview_short_title = 'Ask the Court for a Interpreter Notice'
+---
+code: |
+  al_form_type = 'starts_case'
+---
+features:
+  navigation: True
+---
+sections:
+  - review_InterpreterNotice__with_variables: Review your answers
+---
+objects:
+  - plaintiffs: ALPeopleList.using(there_are_any=True)
+  - users: ALPeopleList.using(there_are_any=True)
+  - defendants: ALPeopleList.using(there_are_any=True)
+---
+code: |
+  party_role =   user_role.title()
+---
+###################### Main order ######################
+mandatory: True
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+id: main_order_InterpreterNotice__with_variables
+code: |
+  al_intro_screen
+  InterpreterNotice__with_variables_intro
+  # Interview order block has form-specific logic controlling order/branching
+  interview_order_InterpreterNotice__with_variables
+  signature_date
+  # Save (anonymized) interview statistics.
+  store_variables_snapshot(data={'zip': users[0].address.zip})
+  InterpreterNotice__with_variables_preview_question  # Pre-canned preview screen
+  basic_questions_signature_flow
+  users[0].signature
+  InterpreterNotice__with_variables_download
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic of questions in the interview
+id: interview_order_InterpreterNotice__with_variables
+code: |
+  # Set the allowed courts for this interview
+  allowed_courts = interview_metadata["InterpreterNotice__with_variables"]["allowed courts"]
+  nav.set_section('review_InterpreterNotice__with_variables')
+  # Below sets the user_role by asking a question.
+  # You can set user_role directly instead to either 'plaintiff' or 'defendant'
+  user_ask_role
+  Notice_of_Interpreter_Request
+  users[0].address.address
+  trial_court.address.address
+  set_progress(25.0)
+  users.gather()
+  set_parts(subtitle=str(users))
+  trial_court
+  plaintiffs.gather()
+  set_progress(50.0)
+  defendants.gather()
+  interview_order_InterpreterNotice__with_variables = True
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Interpreter Notice
+continue button field: InterpreterNotice__with_variables_intro
+question: |
+  Interpreter Notice
+subquestion: |
+  If you a non-English speaking defendant or plaintiffs, and you would like to have an interpreter to assist you during  the civil action. The form will helps you  fill the require the appointment of a court-paid (cost and fee) an interpreter.
+---
+id: Review your form before you sign it
+continue button field: InterpreterNotice__with_variables_preview_question
+question: |
+  Review your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page. 
+  
+   ${ al_user_bundle.as_pdf(key='preview') }
+  
+  Click the image to open it in a new tab. Click the 'Make changes' button to fix any mistakes.
+  
+  ${ action_button_html(url_action('review_InterpreterNotice__with_variables'), label='Make changes', color='info') } 
+  
+  Remember to come back to this window to continue and sign your form.
+---
+id: Notice of Interpreter Request
+continue button field: Notice_of_Interpreter_Request
+question: |
+  Notice of Interpreter Request
+fields:
+  - 'Preferred language': user_preferred_language
+
+
+
+  - 'Court docket number': trial_court_docket_number
+
+---
+progress: 100
+id: download
+event: InterpreterNotice__with_variables_download
+question: |
+  Your form is ready to download.
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Make changes" button to fix any mistakes. 
+  
+  ${ action_button_html(url_action('review_InterpreterNotice__with_variables'), label='Make changes', color='info') } 
+  
+  ${ al_user_bundle.download_list_html() }
+  
+  ${ al_user_bundle.send_button_html() }
+---
+objects:
+  - InterpreterNotice__with_variables_attachment: ALDocument.using(title="If you a non-English speaking defendant or plaintiffs, and you would like to have an interpreter to assist you during  the civil action. The form will helps you  fill the require the appointment of a court-paid (cost and fee) an interpreter.", filename="InterpreterNotice_-_with_variables", enabled=True, has_addendum=False)
+---
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[InterpreterNotice__with_variables_attachment], filename="InterpreterNotice_-_with_variables.pdf", title="All forms to download for your records")
+  - al_court_bundle: ALDocumentBundle.using(elements=[InterpreterNotice__with_variables_attachment], filename="InterpreterNotice_-_with_variables.pdf", title="All forms to download for your records")
+---
+attachment:
+    variable name: InterpreterNotice__with_variables_attachment[i]
+    name: Interpreter Notice
+    filename: Interpreter-Notice
+    docx template file: InterpreterNotice_-_with_variables.docx
+---
+id: InterpreterNotice__with_variables review screen
+event: review_InterpreterNotice__with_variables
+question: |
+  Review Screen
+subquestion: |
+  Edit your answers below
+review: 
+  - Edit: user_preferred_language
+    button: |
+      **Preferred language**:
+      ${ user_preferred_language }
+  - Edit: party_role
+    button: |
+      **Party role**:
+      ${ party_role }
+  - Edit: trial_court_docket_number
+    button: |
+      **Court docket number**:
+      ${ trial_court_docket_number }
+  - Edit: users[0].signature
+    button: |
+      **users[0].signature**:
+      ${ users[0].signature }
+  - Edit: users[0].address.address
+    button: |
+      **users[0].address.address**:
+      ${ users[0].address.address }
+  - Edit: trial_court.address.county
+    button: |
+      **trial_court.address.county**:
+      ${ trial_court.address.county }
+  - Edit: users[0].name.first
+    button: |
+      **users**
+
+      % for my_var in users:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'users.revisit'
+    # lets the user edit all of the items at once
+  - Edit: trial_court
+    button: |
+      **trial_court**:
+      ${ trial_court }
+  - Edit: plaintiffs[0].name.first
+    button: |
+      **plaintiffs**
+
+      % for my_var in plaintiffs:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'plaintiffs.revisit'
+    # lets the user edit all of the items at once
+  - Edit: defendants[0].name.first
+    button: |
+      **defendants**
+
+      % for my_var in defendants:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'defendants.revisit'
+    # lets the user edit all of the items at once
