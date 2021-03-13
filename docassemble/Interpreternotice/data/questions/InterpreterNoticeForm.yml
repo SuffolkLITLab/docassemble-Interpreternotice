@@ -62,7 +62,7 @@ code: |
   })
 ---
 code: |
-  interview_short_title = 'Ask the court for a Interpreter notice?'
+  interview_short_title = 'Ask the court for a Interpreter notice'
 ---
 code: |
   al_form_type = 'starts_case'
