@@ -30,9 +30,9 @@ code: |
   if not defined("interview_metadata['InterpreterNoticeForm']"):
     interview_metadata.initializeObject('InterpreterNoticeForm')
   interview_metadata['InterpreterNoticeForm'].update({
-    'title': 'Interpreter notice',
-    'short title': 'Interpreter notice',
-    'description': 'The form helps non-English speaking defendants or plaintiffs fill the require form for a court-paid (cost and fee) for non- English speaking interpreter to assist the defendants or plaintiffs during civil action.',
+    'title': 'Notice of Interpreter Request: Use this form to ask the court for an interpreter in your case.',
+    'short title': 'Notice of Interpreter Request: Use this form to ask the court for an interpreter in your case.',
+    'description': 'Give this form to the court if you need an interpreter. The form tells the court: The language you need to be able to communicate with the court in, and You need the court to appoint and pay for an interpreter.',
     'original_form': '',
     'allowed courts': [
       'Boston Municipal Court',
@@ -62,7 +62,7 @@ code: |
   })
 ---
 code: |
-  interview_short_title = 'Ask the court for an Interpreter notice'
+  interview_short_title = 'Ask the court for an interpreter'
 ---
 code: |
   al_form_type = 'starts_case'
@@ -127,9 +127,15 @@ comment: |
 id: Interpreter notice
 continue button field: InterpreterNoticeForm_intro
 question: |
-  Interpreter notice
+  Notice of Interpreter Request: 
+  Use this form to ask the court for an interpreter in your case.
 subquestion: |
-  The form helps non-English speaking defendants or plaintiffs fill the require form for a court-paid (cost and fee) for non- English speaking interpreter to assist the defendants or plaintiffs during civil action.
+  Give this form to the court if you need an interpreter.  
+
+    The form tells the court:
+
+  * The language you need to be able to communicate with the court in, and 
+  * You need the court to appoint and pay for an interpreter.
 ---
 id: Review your form before you sign it
 continue button field: InterpreterNoticeForm_preview_question
@@ -147,7 +153,7 @@ continue button field: Notice_of_Interpreter_Request
 question: |
   Notice of Interpreter Request
 fields:
-  - 'User preferred language': user_preferred_language
+  - 'What language do you need?': user_preferred_language
 
   - 'Trial court docket number': trial_court_docket_number
     required: False
@@ -167,7 +173,7 @@ subquestion: |
   ${ al_user_bundle.send_button_html() }
 ---
 objects:
-  - InterpreterNoticeForm_attachment: ALDocument.using(title="The form helps non-English speaking defendants or plaintiffs fill the require form for a court-paid (cost and fee) for non- English speaking interpreter to assist the defendant or plaintiff during civil action.", filename="InterpreterNoticeForm", enabled=True, has_addendum=False)
+  - InterpreterNoticeForm_attachment: ALDocument.using(title="Give this form to the court if you need an interpreter. The form tells the court the language you need to be able to communicate with the court in, and you need the court to appoint and pay for an interpreter.", filename="InterpreterNoticeForm", enabled=True, has_addendum=False)
 ---
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[InterpreterNoticeForm_attachment], filename="InterpreterNoticeForm.pdf", title="All forms to download for your records")
