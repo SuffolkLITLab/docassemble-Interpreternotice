@@ -62,7 +62,7 @@ code: |
   })
 ---
 code: |
-  interview_short_title = 'Ask the court for a Interpreter notice'
+  interview_short_title = 'Ask the court for an interpreter'
 ---
 code: |
   al_form_type = 'starts_case'
@@ -109,7 +109,9 @@ code: |
   # Below sets the user_role by asking a question.
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   user_ask_role
-  Notice_of_Interpreter_Request
+  user_preferred_language
+  have_docket_number
+  # Notice_of_Interpreter_Request
   # Set the answer file name.
   set_parts(subtitle=str(users))
   set_progress(12.5)
@@ -127,9 +129,14 @@ comment: |
 id: Interpreter notice
 continue button field: InterpreterNoticeForm_intro
 question: |
-  Interpreter notice
+   Notice of Interpreter Request
 subquestion: |
-  The form helps non-English speaking defendant or plaintiffs fill the require the appointment of a court-paid (cost and fee) for non- English speaking interpreter to assist the defendant or plaintiff during civil action.
+  Give this form to the court if you need an interpreter.
+ 
+  The form tells the court:
+
+  * The language you need to be able to communicate with the court in, and
+  * You need the court to appoint and pay for an interpreter.
 ---
 id: Review your form before you sign it
 continue button field: InterpreterNoticeForm_preview_question
@@ -143,14 +150,27 @@ subquestion: |
   Remember to come back to this window to continue and sign your form.
 ---
 id: Notice of Interpreter Request
-continue button field: Notice_of_Interpreter_Request
+# continue button field: Notice_of_Interpreter_Request
 question: |
-  Notice of Interpreter Request
+  What language do you need the interpreter to use?
 fields:
-  - 'User preferred language': user_preferred_language
+  - no label: user_preferred_language
+---
+id: Docket number
+Question: |
+  Do you already have a docket number for your case?
+fields:
+  - no label: have_docket_number
+    datatype: yesnoradio
+    help: |
+      Look at the top right corner of any papers the court gave you. 
+      % if al_form_type == 'starts_case':
+      The court may not have given you a Docket Number if you are just starting the case. 
+      % endif
 
-  - 'Trial court docket number': trial_court_docket_number
-    required: False
+  - 'What is the docket number': trial_court_docket_number
+    show if: have_docket_number
+      
 ---
 progress: 100
 id: download
