@@ -64,9 +64,6 @@ code: |
 code: |
   interview_short_title = 'Ask the court for an interpreter'
 ---
-code: |
-  al_form_type = 'starts_case'
----
 features:
   navigation: True
 ---
