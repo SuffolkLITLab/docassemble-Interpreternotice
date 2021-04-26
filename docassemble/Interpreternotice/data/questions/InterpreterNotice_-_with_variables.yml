@@ -61,6 +61,13 @@ code: |
     'typical role': 'unknown',
   })
 ---
+comment: |
+  Ensure that addresses_to_search is the correct set of courts.
+  See above--it's defined to user's address by default
+code: |  
+  addresses_to_search=[users[0].address]
+  all_matches = all_courts.matching_courts([users[0].address], court_types=allowed_courts)
+---
 code: |
   interview_short_title = 'Ask the court for an interpreter'
 ---
