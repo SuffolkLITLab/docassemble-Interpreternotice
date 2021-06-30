@@ -1,6 +1,7 @@
 include:
   - docassemble.AssemblyLine:al_package.yml
   - docassemble.MassAccess:massaccess.yml
+  - docassemble.ALMassachusetts:al_massachusetts.yml
 ---
 comment: |
   The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
@@ -69,7 +70,7 @@ code: |
   })
 ---
 code: |
-  interview_short_title = 'Ask the Court for a Interpreter Notice'
+  interview_short_title = 'Ask the Court for an Interpreter'
 ---
 code: |
   al_form_type = 'starts_case'
@@ -81,12 +82,13 @@ sections:
   - review_InterpreterNotice__with_variables: Review your answers
 ---
 objects:
-  - plaintiffs: ALPeopleList.using(there_are_any=True)
-  - users: ALPeopleList.using(there_are_any=True)
-  - defendants: ALPeopleList.using(there_are_any=True)
+  #- plaintiffs: ALPeopleList.using(there_are_any=True)
+  - users: ALPeopleList.using(there_are_any=True )
+  - other_parties: ALPeopleList
+  #- defendants: ALPeopleList.using(there_are_any=True)
 ---
 code: |
-  party_role =   user_role.title()
+  party_role = user_role.title()
 ---
 ###################### Main order ######################
 mandatory: True
@@ -118,16 +120,20 @@ code: |
   # Below sets the user_role by asking a question.
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   user_ask_role
-  Notice_of_Interpreter_Request
-  users[0].address.address
-  trial_court.address.address
-  set_progress(25.0)
   users.gather()
+  user_preferred_language
+  users[0].address.address
+  #defendants.gather()
+  #plaintiffs.gather()
+  other_parties.gather()
+  docket_number
+  #trial_court.address.address
+  set_progress(25.0)
   set_parts(subtitle=str(users))
   trial_court
-  plaintiffs.gather()
+
   set_progress(50.0)
-  defendants.gather()
+
   interview_order_InterpreterNotice__with_variables = True
 ---
 comment: |
@@ -135,9 +141,15 @@ comment: |
 id: Interpreter Notice
 continue button field: InterpreterNotice__with_variables_intro
 question: |
-  Interpreter Notice
+  Notice of Interpreter Request
 subquestion: |
-  If you a non-English speaking defendant or plaintiffs, and you would like to have an interpreter to assist you during  the civil action. The form will helps you  fill the require the appointment of a court-paid (cost and fee) an interpreter.
+  You have the right to an interpreter.
+  
+  If there is a chance you may not understand everything that is said in English, or if other people may not be able to understand you, ask for an interpreter.
+  
+  You do not have to speak only through the interpreter, but you may have one if you need one.
+  
+  The form helps tell the court to provide you an interpreter. A court interpreter is free to you. The court pays the interpreter.
 ---
 id: Review your form before you sign it
 continue button field: InterpreterNotice__with_variables_preview_question
@@ -155,16 +167,10 @@ subquestion: |
   Remember to come back to this window to continue and sign your form.
 ---
 id: Notice of Interpreter Request
-continue button field: Notice_of_Interpreter_Request
 question: |
-  Notice of Interpreter Request
+  What is your preferred language?
 fields:
   - 'Preferred language': user_preferred_language
-
-
-
-  - 'Court docket number': trial_court_docket_number
-
 ---
 progress: 100
 id: download
