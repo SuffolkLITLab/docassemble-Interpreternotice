@@ -37,15 +37,15 @@ code: |
     'description': 'If you a non-English speaking defendant or plaintiffs, and you would like to have an interpreter to assist you during  the civil action. The form will helps you  fill the require the appointment of a court-paid (cost and fee) an interpreter.',
     'original_form': '',
     'allowed courts': [
-      'Appeal Courts',
-      'Boston Municipal Court',
-      'District Court',
-      'Housing Court',
-      'Juvenile Court',
-      'Land Court',
-      'Massachusetts Supreme Judicial Court',
-      'Probate and Family Court',
-      'Superior Court',
+     #'Appeals Court',
+     'Boston Municipal Court', # BREAKS TRIAL COURT QUESTION
+     #'District Court',
+     #'Housing Court',
+     #'Juvenile Court',
+     #'Land Court',
+     #'Massachusetts Supreme Judicial Court', #MSJC breaks trial court question
+     #'Probate and Family Court',
+     #'Superior Court',
     ],
     'categories': [
       'BE-00-00-00-00',
@@ -121,8 +121,11 @@ code: |
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   user_ask_role
   users.gather()
+  users[0].address.address
   user_preferred_language
   users[0].address.address
+  trial_court
+
   #defendants.gather()
   #plaintiffs.gather()
   other_parties.gather()
@@ -130,7 +133,7 @@ code: |
   #trial_court.address.address
   set_progress(25.0)
   set_parts(subtitle=str(users))
-  trial_court
+
 
   set_progress(50.0)
 
