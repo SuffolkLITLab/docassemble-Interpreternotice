@@ -34,7 +34,7 @@ code: |
   interview_metadata['InterpreterNotice__with_variables'].update({
     'title': 'Interpreter Notice',
     'short title': 'Interpreter Notice',
-    'description': 'If you a non-English speaking defendant or plaintiffs, and you would like to have an interpreter to assist you during  the civil action. The form will helps you  fill the require the appointment of a court-paid (cost and fee) an interpreter.',
+    'description': 'Notice of Interpreter Request',
     'original_form': '',
     'allowed courts': [
      'Appeals Court',
@@ -69,7 +69,7 @@ code: |
   })
 ---
 code: |
-  interview_short_title = 'Ask the Court for an Interpreter'
+  interview_short_title = 'Ask the Court for an interpreter'
 ---
 code: |
   al_form_type = 'starts_case'
@@ -122,20 +122,12 @@ code: |
   users.gather()
   users[0].address.address
   user_preferred_language
-  users[0].address.address
-  trial_court
-
-  #defendants.gather()
-  #plaintiffs.gather()
+  set_progress(25.0)
   other_parties.gather()
   docket_number
-  #trial_court.address.address
-  set_progress(25.0)
+  trial_court
   set_parts(subtitle=str(users))
-
-
   set_progress(50.0)
-
   interview_order_InterpreterNotice__with_variables = True
 ---
 comment: |
@@ -147,11 +139,12 @@ question: |
 subquestion: |
   You have the right to an interpreter.
   
-  If there is a chance you may not understand everything that is said in English, or if other people may not be able to understand you, ask for an interpreter.
-  
-  You do not have to speak only through the interpreter, but you may have one if you need one.
-  
-  The form helps tell the court to provide you an interpreter. A court interpreter is free to you. The court pays the interpreter.
+  Give this form to the court if you need an interpreter.
+
+  The form tells the court:
+
+  * The language you need to be able to communicate with the court in, and
+  * You need the court to appoint and pay for an interpreter.
 ---
 id: Review your form before you sign it
 continue button field: InterpreterNotice__with_variables_preview_question
@@ -170,9 +163,23 @@ subquestion: |
 ---
 id: Notice of Interpreter Request
 question: |
-  What is your preferred language?
+  What language do you need the interpreter to use?
 fields:
   - 'Preferred language': user_preferred_language
+---
+id: Docket number
+Question: |
+  Do you already have a docket number for your case?
+fields:
+  - no label: have_docket_number
+    datatype: yesnoradio
+    help: |
+      Look at the top right corner of any papers the court gave you. 
+      % if al_form_type == 'starts_case':
+      The court may not have given you a Docket Number if you are just starting the case. 
+      % endif
+  - 'What is the docket number': docket_number
+    show if: have_docket_number
 ---
 progress: 100
 id: download
@@ -191,7 +198,7 @@ subquestion: |
   ${ al_user_bundle.send_button_html() }
 ---
 objects:
-  - InterpreterNotice__with_variables_attachment: ALDocument.using(title="If you a non-English speaking defendant or plaintiffs, and you would like to have an interpreter to assist you during  the civil action. The form will helps you  fill the require the appointment of a court-paid (cost and fee) an interpreter.", filename="InterpreterNotice_-_with_variables", enabled=True, has_addendum=False)
+  - InterpreterNotice__with_variables_attachment: ALDocument.using(title="Notice of Interpreter Request", filename="InterpreterNotice", enabled=True, has_addendum=False)
 ---
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[InterpreterNotice__with_variables_attachment], filename="InterpreterNotice_-_with_variables.pdf", title="All forms to download for your records")
@@ -200,7 +207,7 @@ objects:
 attachment:
     variable name: InterpreterNotice__with_variables_attachment[i]
     name: Interpreter Notice
-    filename: Interpreter-Notice
+    filename: Request for an Interpreter Notice
     docx template file: InterpreterNotice_-_with_variables.docx
 ---
 id: InterpreterNotice__with_variables review screen
