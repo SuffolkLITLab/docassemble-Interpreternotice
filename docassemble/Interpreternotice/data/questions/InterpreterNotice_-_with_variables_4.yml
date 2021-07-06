@@ -120,11 +120,11 @@ code: |
   # You can set user_role directly instead to either 'plaintiff' or 'defendant'
   user_ask_role
   users.gather()
+  other_parties.gather()
   users[0].address.address
   user_preferred_language
   set_progress(25.0)
-  other_parties.gather()
-  docket_number
+  have_docket_number
   trial_court
   set_parts(subtitle=str(users))
   set_progress(50.0)
@@ -161,7 +161,7 @@ subquestion: |
   
   Remember to come back to this window to continue and sign your form.
 ---
-id: Notice of Interpreter Request
+id: language
 question: |
   What language do you need the interpreter to use?
 fields:
@@ -169,7 +169,7 @@ fields:
 ---
 id: Docket number
 Question: |
-  Do you already have a docket number for your case?
+  Do you have a docket number for your case?
 fields:
   - no label: have_docket_number
     datatype: yesnoradio
@@ -178,8 +178,14 @@ fields:
       % if al_form_type == 'starts_case':
       The court may not have given you a Docket Number if you are just starting the case. 
       % endif
-  - 'What is the docket number': docket_number
+  - Docket number: docket_number
     show if: have_docket_number
+---
+code: |
+  # This is a placeholder for the addresses that will be searched
+  # for matching address to court
+  # TODO: is there a better default? Probably very case specific
+  addresses_to_search = [users[0].address]
 ---
 progress: 100
 id: download
@@ -225,7 +231,7 @@ review:
     button: |
       **Party role**:
       ${ party_role }
-  - Edit: trial_court_docket_number
+  - Edit: docket_number
     button: |
       **Court docket number**:
       ${ trial_court_docket_number }
