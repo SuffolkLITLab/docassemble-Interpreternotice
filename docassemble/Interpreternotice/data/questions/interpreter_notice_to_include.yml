@@ -1,0 +1,196 @@
+include:
+  - docassemble.AssemblyLine:al_package.yml
+---
+comment: |
+  This section is used by AssemblyLine to control how some of the questions work.
+mandatory: True
+code: |
+  interview_metadata # make sure we initialize the object
+  if not defined("interview_metadata['InterpreterNotice__with_variables']"):
+    interview_metadata.initializeObject('InterpreterNotice__with_variables')
+  interview_metadata['InterpreterNotice__with_variables'].update({
+    'title': 'Interpreter Notice',
+    'short title': 'Interpreter Notice',
+    'description': 'Notice of Interpreter Request',
+    'original_form': '',
+    'allowed courts': [
+     'Appeals Court',
+     'Boston Municipal Court',
+     'District Court',
+     'Housing Court',
+     'Juvenile Court',
+     'Land Court',
+     'Probate and Family Court',
+     'Superior Court',
+    ],
+    'categories': [
+      'BE-00-00-00-00',
+      'BE-04-00-00-00',
+      'ED-00-00-00-00',
+      'ES-00-00-00-00',
+      'FA-00-00-00-00',
+      'FA-07-00-00-00',
+      'HE-00-00-00-00',
+      'HO-00-00-00-00',
+      'IM-00-00-00-00',
+      'MO-00-00-00-00',
+      'Other',
+      'RI-10-00-00-00',
+      'Intellectual Property',
+      'Tax',
+      'Tort',
+    ],
+    'logic block variable': 'InterpreterNotice__with_variables',
+    'attachment block variable': 'InterpreterNotice__with_variables_attachment',
+    'typical role': 'unknown',
+  })
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic of questions in the interview
+id: interview_order_InterpreterNotice__with_variables
+code: |
+  # Set the allowed courts for this interview
+  allowed_courts = interview_metadata["InterpreterNotice__with_variables"]["allowed courts"]
+  nav.set_section('review_InterpreterNotice__with_variables')
+  # Below sets the user_role by asking a question.
+  # You can set user_role directly instead to either 'plaintiff' or 'defendant'
+  user_ask_role
+  users.gather()
+  other_parties.gather()
+  users[0].address.address
+  user_preferred_language
+  set_progress(25.0)
+  have_docket_number
+  trial_court
+  set_parts(subtitle=str(users))
+  set_progress(50.0)
+  interview_order_InterpreterNotice__with_variables = True
+---
+id: Interpreter Notice
+continue button field: InterpreterNotice__with_variables_intro
+question: |
+  Notice of Interpreter Request
+subquestion: |
+  You have the right to an interpreter.
+  
+  Give this form to the court if you need an interpreter.
+
+  The form tells the court:
+
+  * The language you need to be able to communicate with the court in, and
+  * You need the court to appoint and pay for an interpreter.
+---
+id: Review your form before you sign it
+continue button field: InterpreterNotice__with_variables_preview_question
+question: |
+  Review your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page. 
+  
+   ${ al_user_bundle.as_pdf(key='preview') }
+  
+  Click the image to open it in a new tab. Click the 'Make changes' button to fix any mistakes.
+  
+  ${ action_button_html(url_action('review_InterpreterNotice__with_variables'), label='Make changes', color='info') } 
+  
+  Remember to come back to this window to continue and sign your form.
+---
+id: language
+question: |
+  What language do you need the interpreter to use?
+fields:
+  - 'Preferred language': user_preferred_language
+---
+id: Docket number
+Question: |
+  Do you have a docket number for your case?
+fields:
+  - no label: have_docket_number
+    datatype: yesnoradio
+    help: |
+      Look at the top right corner of any papers the court gave you. 
+      % if al_form_type == 'starts_case':
+      The court may not have given you a Docket Number if you are just starting the case. 
+      % endif
+  - Docket number: docket_number
+    show if: have_docket_number
+---
+code: |
+  party_role = user_role.title()    
+---
+code: |
+  addresses_to_search = [users[0].address]
+---
+objects:
+  - InterpreterNotice_attachment: ALDocument.using(title="Notice of Interpreter Request", filename="InterpreterNotice", has_addendum=False, enabled=user_needs_interpreter)  
+---
+attachment:
+    variable name: InterpreterNotice_attachment[i]
+    name: Interpreter Notice
+    filename: Request for an Interpreter Notice
+    docx template file: InterpreterNotice_-_with_variables.docx
+    
+---
+id: InterpreterNotice__with_variables review screen
+event: review_InterpreterNotice__with_variables
+question: |
+  Review Screen
+subquestion: |
+  Edit your answers below
+review: 
+  - Edit: user_preferred_language
+    button: |
+      **Preferred language**:
+      ${ user_preferred_language }
+  - Edit: party_role
+    button: |
+      **Party role**:
+      ${ party_role }
+  - Edit: docket_number
+    button: |
+      **Court docket number**:
+      ${ trial_court_docket_number }
+  - Edit: users[0].signature
+    button: |
+      **users[0].signature**:
+      ${ users[0].signature }
+  - Edit: users[0].address.address
+    button: |
+      **users[0].address.address**:
+      ${ users[0].address.address }
+  - Edit: trial_court.address.county
+    button: |
+      **trial_court.address.county**:
+      ${ trial_court.address.county }
+  - Edit: users[0].name.first
+    button: |
+      **users**
+
+      % for my_var in users:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'users.revisit'
+    # lets the user edit all of the items at once
+  - Edit: trial_court
+    button: |
+      **trial_court**:
+      ${ trial_court }
+  - Edit: plaintiffs[0].name.first
+    button: |
+      **plaintiffs**
+
+      % for my_var in plaintiffs:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'plaintiffs.revisit'
+    # lets the user edit all of the items at once
+  - Edit: defendants[0].name.first
+    button: |
+      **defendants**
+
+      % for my_var in defendants:
+        * ${ my_var }
+      % endfor
+    # NOTE: a question block with 'defendants.revisit'
+    # lets the user edit all of the items at once
