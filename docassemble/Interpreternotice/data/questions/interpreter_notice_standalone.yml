@@ -82,8 +82,8 @@ subquestion: |
   ${ al_user_bundle.send_button_html() }
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[InterpreterNotice__with_variables_attachment], filename="InterpreterNotice_-_with_variables.pdf", title="All forms to download for your records")
-  - al_court_bundle: ALDocumentBundle.using(elements=[InterpreterNotice__with_variables_attachment], filename="InterpreterNotice_-_with_variables.pdf", title="All forms to download for your records")
+  - al_user_bundle: ALDocumentBundle.using(elements=[InterpreterNotice_attachment], filename="InterpreterNotice_-_with_variables.pdf", title="All forms to download for your records")
+  - al_court_bundle: ALDocumentBundle.using(elements=[InterpreterNotice_attachment], filename="InterpreterNotice_-_with_variables.pdf", title="All forms to download for your records")
 ---
 code: |
   user_needs_interpreter = True
