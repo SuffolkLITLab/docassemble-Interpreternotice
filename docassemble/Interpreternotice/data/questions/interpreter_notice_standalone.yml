@@ -59,7 +59,7 @@ code: |
   interview_order_InterpreterNotice__with_variables
   signature_date
   # Save (anonymized) interview statistics.
-  store_variables_snapshot(data={'zip': users[0].address.zip})
+  store_variables_snapshot(data={'zip': users[0].address.zip, 'user_preferred_language': user_preferred_language}, persistent=True)
   InterpreterNotice__with_variables_preview_question  # Pre-canned preview screen
   basic_questions_signature_flow
   users[0].signature

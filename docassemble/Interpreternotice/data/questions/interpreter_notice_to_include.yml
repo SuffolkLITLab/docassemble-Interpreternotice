@@ -150,35 +150,31 @@ review:
   - Edit: docket_number
     button: |
       **Court docket number**:
-      ${ trial_court_docket_number }
+      ${ docket_number }
   - Edit: users[0].signature
     button: |
-      **users[0].signature**:
+      **Signature**:
       ${ users[0].signature }
   - Edit: users[0].address.address
     button: |
-      **users[0].address.address**:
-      ${ users[0].address.address }
-  - Edit: trial_court.address.county
+      **Your address**:
+      ${ users[0].address.on_one_line() }
+  - Edit: trial_court
     button: |
-      **trial_court.address.county**:
-      ${ trial_court.address.county }
+      **Court**:
+      ${ trial_court }
   - Edit: users[0].name.first
     button: |
-      **users**
+      **Your name**
 
       % for my_var in users:
         * ${ my_var }
       % endfor
     # NOTE: a question block with 'users.revisit'
     # lets the user edit all of the items at once
-  - Edit: trial_court
-    button: |
-      **trial_court**:
-      ${ trial_court }
   - Edit: plaintiffs[0].name.first
     button: |
-      **plaintiffs**
+      **Plaintiffs**
 
       % for my_var in plaintiffs:
         * ${ my_var }
@@ -187,7 +183,7 @@ review:
     # lets the user edit all of the items at once
   - Edit: defendants[0].name.first
     button: |
-      **defendants**
+      **Defendants**
 
       % for my_var in defendants:
         * ${ my_var }
