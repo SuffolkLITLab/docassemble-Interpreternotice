@@ -53,7 +53,7 @@ code: |
   # Set the allowed courts for this interview
   allowed_courts = interview_metadata["InterpreterNotice__with_variables"]["allowed courts"]
   nav.set_section('review_InterpreterNotice__with_variables')
-  user_role
+  user_ask_role
   users.gather()
   other_parties.gather()
   users[0].address.address
