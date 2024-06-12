@@ -4,26 +4,47 @@ include:
   - docassemble.ALMassachusetts:al_massachusetts.yml
   - interpreter_notice_to_include.yml
 ---
-comment: |
-  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
 metadata:
   title: |
     Interpreter Notice
   short title: |
     Interpreter Notice
   tags:
-    - BE-00-00-00-00
-    - BE-04-00-00-00
-    - ED-00-00-00-00
-    - ES-00-00-00-00
-    - FA-00-00-00-00
-    - FA-07-00-00-00
-    - HE-00-00-00-00
-    - HO-00-00-00-00
-    - IM-00-00-00-00
-    - MO-00-00-00-00
     - Other
     - RI-10-00-00-00
+    - RI-21-00-00-00
+    - CO-00-00-00-00
+  LIST_topics: 
+    - RI-10-00-00-00
+    - RI-21-00-00-00
+    - CO-00-00-00-00
+  description: |
+    If your first language is not English, you can use this interview to tell the court
+    that you need an interpreter. The court will provide an interpreter for free during
+    your court hearings.
+  can_I_use_this_form: |
+    You can use this form if you need an interpreter for your court hearings. You may need
+    an interpreter even if you speak some English.
+  before_you_start: |
+    If you have it, get the docket number or case number for your case ready before you start this interview.
+  maturity: production
+  estimated_completion_minutes: 5
+  estimated_completion_delta: 5
+  languages:
+    - en
+  jurisdiction: NAM-US-US+MA
+  original_form: https://www.gbls.org
+  original_form_published_on: 2019
+  review_date: 2024
+  form_titles:
+    - Interpreter Notice 
+  fees:
+    - Filing fee: 0.00
+  update_notes: |
+    This is an unofficial form that helps someone let the court know that they need
+    an interpreter (so that the information is in the litigant's file). There is currently
+    no official court form this process. It was created by Greater Boston Legal Services
+    in the Housing Unit but should be usable in any case type.
   authors:
     - Camy Ruck
     - Vilasinee Khonsak
