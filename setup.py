@@ -52,7 +52,7 @@ setup(name='docassemble.Interpreternotice',
       license='The MIT License',
       url='https://courtformsonline.org',
       packages=find_namespace_packages(),
-      install_requires=[],
+      install_requires=['docassemble.AssemblyLine>=4.0.0', 'docassemble.ALMassachusetts', 'docassemble.MassAccess'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/Interpreternotice/', package='docassemble.Interpreternotice'),
      )
