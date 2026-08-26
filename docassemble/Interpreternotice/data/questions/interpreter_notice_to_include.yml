@@ -45,6 +45,9 @@ code: |
     'typical role': 'unknown',
   })
 ---
+code: |
+  al_interview_languages = ['en', 'es', 'pt', 'zh', 'ht', 'km', 'vi', 'ar', 'ru']
+---
 #################### Interview order #####################
 comment: |
   Controls order and branching logic of questions in the interview
@@ -52,13 +55,14 @@ id: interview_order_InterpreterNotice__with_variables
 code: |
   # Set the allowed courts for this interview
   allowed_courts = interview_metadata["InterpreterNotice__with_variables"]["allowed courts"]
-  nav.set_section('review_InterpreterNotice__with_variables')
+  nav.set_section('section_about_you')
   user_ask_role
   users.gather()
   other_parties.gather()
   users[0].address.address
   user_preferred_language
   set_progress(25.0)
+  nav.set_section('section_case')
   have_docket_number
   trial_court
   set_parts(subtitle=str(users))
@@ -69,6 +73,9 @@ id: Interpreter Notice
 continue button field: InterpreterNotice__with_variables_intro
 question: |
   Notice of Interpreter Request
+pre: |
+  ${ nav.set_section('section_intro') or '' }
+  ${ get_language_list(lang_codes=al_interview_languages, current=al_user_language) }
 subquestion: |
   You have the right to an interpreter.
   
@@ -83,6 +90,8 @@ id: Review your form before you sign it
 continue button field: InterpreterNotice__with_variables_preview_question
 question: |
   Review your form before you sign it
+pre: |
+  ${ nav.set_section('section_review') or '' }
 subquestion: |
   Here is a preview of the form you will sign on the next page. 
   
@@ -97,12 +106,16 @@ subquestion: |
 id: language
 question: |
   What language do you need the interpreter to use?
+pre: |
+  ${ nav.set_section('section_about_you') or '' }
 fields:
   - 'Preferred language': user_preferred_language
 ---
 id: Docket number
-Question: |
+question: |
   Do you have a docket number for your case?
+pre: |
+  ${ nav.set_section('section_case') or '' }
 fields:
   - no label: have_docket_number
     datatype: yesnoradio
@@ -134,6 +147,8 @@ id: InterpreterNotice__with_variables review screen
 event: review_InterpreterNotice__with_variables
 question: |
   Review Screen
+pre: |
+  ${ nav.set_section('section_review') or '' }
 subquestion: |
   Edit your answers below
 review: 

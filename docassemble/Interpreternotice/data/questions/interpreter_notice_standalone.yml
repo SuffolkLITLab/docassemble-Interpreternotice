@@ -1,3 +1,14 @@
+---
+translations:
+  - interpreter_notice_standalone_es.xlsx
+  - interpreter_notice_standalone_pt.xlsx
+  - interpreter_notice_standalone_zh_Hant.xlsx
+  - interpreter_notice_standalone_ht.xlsx
+  - interpreter_notice_standalone_km.xlsx
+  - interpreter_notice_standalone_vi.xlsx
+  - interpreter_notice_standalone_ar.xlsx
+  - interpreter_notice_standalone_ru.xlsx
+---
 include:
   - docassemble.AssemblyLine:al_package.yml
   - docassemble.MassAccess:massaccess.yml
@@ -32,6 +43,14 @@ metadata:
   estimated_completion_delta: 5
   languages:
     - en
+    - es
+    - pt
+    - zh
+    - ht
+    - km
+    - vi
+    - ar
+    - ru
   jurisdiction: NAM-US-US+MA
   original_form: https://www.gbls.org
   original_form_published_on: 2019
@@ -61,7 +80,84 @@ features:
   navigation: True
 ---
 sections:
-  - review_InterpreterNotice__with_variables: Review your answers
+  - section_intro: Getting started
+  - section_about_you: About you
+  - section_case: Your case
+  - section_review: Review your form
+  - section_sign: Sign your form
+  - section_download: Download and file
+---
+language: es
+sections:
+  - section_intro: Empezar
+  - section_about_you: Sobre usted
+  - section_case: Su caso
+  - section_review: Revise su formulario
+  - section_sign: Firme su formulario
+  - section_download: Descargue y entregue
+---
+language: pt
+sections:
+  - section_intro: Começar
+  - section_about_you: Sobre você
+  - section_case: Seu caso
+  - section_review: Revise seu formulário
+  - section_sign: Assine seu formulário
+  - section_download: Baixar e entregar
+---
+language: zh
+sections:
+  - section_intro: 開始
+  - section_about_you: 關於您
+  - section_case: 您的案件
+  - section_review: 查看表格
+  - section_sign: 簽署表格
+  - section_download: 下載並遞交
+---
+language: ht
+sections:
+  - section_intro: Kòmanse
+  - section_about_you: Enfòmasyon sou ou
+  - section_case: Ka ou a
+  - section_review: Revize fòm ou
+  - section_sign: Siyen fòm ou
+  - section_download: Telechaje epi remet
+---
+language: km
+sections:
+  - section_intro: ចាប់ផ្តើម
+  - section_about_you: អំពីអ្នក
+  - section_case: ករណីរបស់អ្នក
+  - section_review: ពិនិត្យទម្រង់របស់អ្នក
+  - section_sign: ចុះហត្ថលេខាលើទម្រង់របស់អ្នក
+  - section_download: ទាញយក និងដាក់ស្នើ
+---
+language: vi
+sections:
+  - section_intro: Bắt đầu
+  - section_about_you: Thông tin về bạn
+  - section_case: Vụ việc của bạn
+  - section_review: Xem lại mẫu đơn
+  - section_sign: Ký mẫu đơn
+  - section_download: Tải xuống và nộp
+---
+language: ar
+sections:
+  - section_intro: ابدأ
+  - section_about_you: معلومات عنك
+  - section_case: قضيتك
+  - section_review: راجع النموذج
+  - section_sign: وقّع النموذج
+  - section_download: نزّل وقدّم
+---
+language: ru
+sections:
+  - section_intro: Начало
+  - section_about_you: О вас
+  - section_case: Ваше дело
+  - section_review: Проверьте форму
+  - section_sign: Подпишите форму
+  - section_download: Скачать и подать
 ---
 objects:
   - users: ALPeopleList.using(there_are_any=True )
@@ -74,16 +170,19 @@ comment: |
   Delete mandatory: True to include in another interview
 id: main_order_InterpreterNotice__with_variables
 code: |
-  al_intro_screen
+  nav.set_section('section_intro')
   InterpreterNotice__with_variables_intro
   # Interview order block has form-specific logic controlling order/branching
   interview_order_InterpreterNotice__with_variables
   signature_date
   # Save (anonymized) interview statistics.
   store_variables_snapshot(data={'zip': users[0].address.zip, 'user_preferred_language': user_preferred_language}, persistent=True)
+  nav.set_section('section_review')
   InterpreterNotice__with_variables_preview_question  # Pre-canned preview screen
+  nav.set_section('section_sign')
   basic_questions_signature_flow
   users[0].signature
+  nav.set_section('section_download')
   InterpreterNotice__with_variables_download
 ---
 progress: 100
@@ -91,6 +190,8 @@ id: download
 event: InterpreterNotice__with_variables_download
 question: |
   Your form is ready to download.
+pre: |
+  ${ nav.set_section('section_download') or '' }
 subquestion: |
   Thank you ${users}. Your form is ready to download and deliver.
   
