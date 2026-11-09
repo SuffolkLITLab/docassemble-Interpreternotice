@@ -104,7 +104,7 @@ id: Docket number
 Question: |
   Do you have a docket number for your case?
 fields:
-  - no label: have_docket_number
+  - "Do you have a docket number?": have_docket_number
     datatype: yesnoradio
     help: |
       Look at the top right corner of any papers the court gave you. 
